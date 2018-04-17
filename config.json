@@ -1,0 +1,7 @@
+{
+  "apiKey": "apiKey",
+  "authDomain": "smartbin-mailbox.firebaseapp.com",
+  "databaseURL": "https://smartbin-mailbox.firebaseio.com/",
+  "storageBucket": "smartbin-mailbox.appspot.com",
+  "serviceAccount": "smartbin-mailbox-firebase-adminsdk-zbcju-c8bd6c197a.json"
+}
