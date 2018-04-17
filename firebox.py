@@ -80,6 +80,13 @@ class MailboxSource(MailboxBase):
         self._db.child(self.mailbox).child('task_flag').stream(
             ft.partial(self._handler, val=False, cb=callback,
                 post=lambda: None))
+    
+    def pop_data(self):
+        """Grab data and clear it from Firebase
+        """
+        result = self.data
+        self.data = None
+        return result
 
 
 class MailboxSink(MailboxBase):
@@ -119,6 +126,6 @@ def test_source(mailbox):
     src = MailboxSource(mailbox)
     def src_handle(msg, sender):
         print('Handling source flag lowered')
-        print('Grabbing work: "{}"'.format(sender.data))
+        print('Grabbing work: "{}"'.format(sender.pop_data()))
     src.register_cb(src_handle)
     src.raise_flag()

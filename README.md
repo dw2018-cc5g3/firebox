@@ -50,8 +50,13 @@ The source must provide a **callback** that handles the received data. This
 callback has the signature `<callback>(msg, sender)` where `msg` is a firebase
 stream message and `sender` is the `MailboxSource` that called the callback.
 
-Inside the callback, access `sender.data` (but don't modify it) to see what
-data was changed.
+Inside the callback, call `sender.pop_data()` to see what data was changed. You
+only have one chance to do this because the data value in Firebase is deleted 
+when you call `pop_data()`.
+
+The data returned can be `None`, this indicates that the data was cleared. 
+So either there is no valid data from the sink or you never raised the flag
+and now you are getting a random event.
 
 Sample callback:
 
