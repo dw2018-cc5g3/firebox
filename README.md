@@ -62,7 +62,7 @@ Sample callback:
 
     def src_handle(msg, sender):
         print('Handling source flag lowered')
-        print('Grabbing work: "{}"'.format(sender.data))
+        print('Grabbing work: "{}"'.format(sender.pop_data()))
 
 Registering the callback:
 
