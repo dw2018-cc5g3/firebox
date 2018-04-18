@@ -67,11 +67,16 @@ Sample callback:
 Registering the callback:
 
     src = firebox.MailboxSource('card_reader')
-    src.register_cb(src_handle)
+    pyre_stream = src.register_cb(src_handle)
 
 To raise the flag and signal to the sink device to begin work:
 
     src.raise_flag()
+
+When exiting the main thread, to stop the listening thread (so that the Python
+process exits):
+
+    pyre_stream.close()
 
 Note: if the sink is already processing work (in its callback), the data will 
 be sent to the source regardless of flag status. Make sure the source callback
@@ -98,12 +103,24 @@ Sample callback:
 Registering the callback:
 
     snk = MailboxSink('card_reader')
-    snk.register_cb(sink_handle)
+    pyre_stream = snk.register_cb(sink_handle)
+
+When exiting the main thread, to stop the listening thread (so that the Python
+process exits):
+
+    pyre_stream.close()
 
 Flag lowering is handled automatically after the callback exits.
 
 ## Removing callbacks
 
-Removing callbacks can't be done. So only register as many callbacks as you 
-need, and make sure the callback can decide if it should or should not run 
-based on whether the application is in a state that can accept the data.
+To prevent the callback executing when you don't want it to, you can remove the
+callback you registered with:
+
+    pyre_stream = src.register_cb(src_handle)
+    pyre_stream.close()
+
+You can add the callback again later.
+
+You **must** remove all callbacks before exiting your app (eg in
+`kivy.app.App.on_stop()`) for the main Python process to exit.
